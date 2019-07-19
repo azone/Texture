@@ -511,7 +511,7 @@ if (shouldApply) { _layer.layerProperty = (layerValueExpr); } else { ASDisplayNo
 - (BOOL)isOpaque
 {
   _bridge_prologue_read;
-  return _getFromLayer(opaque);
+  return _getFromViewOrLayer(opaque, opaque);
 }
 
 
@@ -524,7 +524,9 @@ if (shouldApply) { _layer.layerProperty = (layerValueExpr); } else { ASDisplayNo
     BOOL oldOpaque;
     oldOpaque = _layer.opaque;
     _layer.opaque = newOpaque;
-
+    if (!_flags.layerBacked) {
+      _view.opaque = newOpaque;
+    }
     if (oldOpaque != newOpaque) {
       [self setNeedsDisplay];
     }
